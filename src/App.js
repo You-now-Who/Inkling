@@ -1,23 +1,25 @@
 import logo from './logo.svg';
 import './App.css';
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import Demo from './components/Demo';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <Navbar />
+      {/* <Home /> */}
+      <Demo />
+
+       {/* <Editor
+         toolbarClassName="toolbarClassName"
+         wrapperClassName="wrapperClassName"
+         editorClassName="editorClassName"
+         wrapperStyle={{ width: 800, height: 700, border: "1px solid black" }}
+      /> */}
     </div>
   );
 }
