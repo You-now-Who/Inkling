@@ -21,7 +21,7 @@ export default function Demo() {
                     wrapperClassName="wrapperClassName"
                     editorClassName="editorClassName"
                     onEditorStateChange={setEditorState}
-                    wrapperStyle={{ width: 600, height: 500, borderRight: "1px grey" }}
+                    wrapperStyle={{ width: 600, height: 500, borderRight: "1px grey",  }}
                 />
             </div>
                 

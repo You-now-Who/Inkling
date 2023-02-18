@@ -2,6 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.wrapperClass { display: flex; flex-direction: column; }
-.editorClass { order: 1; }
-.toolbarClass { order: 2; }
