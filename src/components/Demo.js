@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.js";
 
 
+let inclusiveAlerts = []
+
+let filterDict = {
+    "he": ["they", "gender neutral"],
+    "she": ["they", "gender neutral"],
+    "her": ["them", "gender neutral"],
+    "him": ["them", "gender neutral"],
+    "his": ["their", "gender neutral"],
+    "hers": ["theirs", "gender neutral"],
+    "himself": ["themself", "gender neutral"],
+    "herself": ["themself", "gender neutral"],
+    "guys": ["folks/people/y'all", "gender neutral"],
+
+
+}
+
+let i = 0
+let p = []
+
 export default function Demo() {
     
     let x = ""
+    
 
-    let inclusiveAlerts = []
-
-    let filterDict = {
-        "he": ["they", "gender neutral"],
-        "she": ["they", "gender neutral"],
-        "her": ["them", "gender neutral"],
-        "him": ["them", "gender neutral"],
-        "his": ["their", "gender neutral"],
-        "hers": ["theirs", "gender neutral"],
-        "himself": ["themself", "gender neutral"],
-        "herself": ["themself", "gender neutral"],
-        "guys": ["folks/people/y'all", "gender neutral"],
-
-
-    }
+    
 
     const [editorState, setEditorState] = useState(
         () => EditorState.createEmpty(),
@@ -32,28 +38,57 @@ export default function Demo() {
     // function to handle the click event of the button
     const handleClick = () => {
         x = editorState.getCurrentContent().getPlainText();
-        console.log(x);
+        console.log('Handle Click: ' + x);
         // Set the editorState plain text to x
-        setEditorState( EditorState.createWithContent(x));
+        // setEditorState( EditorState.createWithContent(x));
 
     }
 
     const returnInclusiveAlerts = (text) => {
-        let inclusiveAlerts = []
+        inclusiveAlerts = []
+        p = []
         text = text.toLowerCase()
 
         // remove all punctuation from text
         text = text.replace(/[.,\/#!$?%\^&\*;:{}=\-_`~()]/g, "")
-        console.log(text)
+        // console.log(text)
 
         let textArray = text.split(" ")
         for (let i = 0; i < textArray.length; i++) {
             if (textArray[i] in filterDict) {
+                p.push(i)
                 inclusiveAlerts.push(textArray[i])
             }
         }
-        return inclusiveAlerts
+        return ([inclusiveAlerts, p])
 
+    }
+
+
+    const replaceWord = (e) => {
+        let btnId = e.target.id
+        let btnIdNum = btnId.slice(3)
+
+        let text = editorState.getCurrentContent().getPlainText()
+        let textArray = text.split(" ")
+
+        let word = textArray[btnIdNum]
+        console.log(word)
+        
+        // extract punctu
+
+
+        textArray[btnIdNum] = filterDict[word.toLowerCase()][0]
+        text = textArray.join(" ")
+        // console.log(EditorState)
+
+        setEditorState( EditorState.createWithContent(
+            ContentState.createFromText(text)
+        ));
+
+        // setEditorState( EditorState.etCurrentContent(editorState, text));
+        console.log(text)
+        
     }
 
     const onEditorChange = (editorState) => {
@@ -62,22 +97,15 @@ export default function Demo() {
         // console.log(x);
         // console.log(returnInclusiveAlerts(x))
 
-        inclusiveAlerts = returnInclusiveAlerts(x)
+        inclusiveAlerts = returnInclusiveAlerts(x)[0]
+        p = returnInclusiveAlerts(x)[1]
 
         let addCard = document.getElementById('addCard')
-        addCard.innerHTML = ""
-        let i = 0;
-        for (i in inclusiveAlerts) {
-            console.log(filterDict[inclusiveAlerts[i]])
-            
-            addCard.innerHTML += `<div class="bg-white p-6 rounded-lg shadow-lg m-2">
-                    <h2 class="text-2xl font-bold mb-2 text-gray-800">` + inclusiveAlerts[i] + `</h2>
-                    <p class="text-gray-700">We suggest to use a more <strong>`+ filterDict[inclusiveAlerts[i]][1] +`</strong> term: '<strong>` + filterDict[inclusiveAlerts[i]][0] + `</strong>'</p>
-                </div>  `
-
-        }
-        let alTitle = document.getElementById('alTitle')
-        alTitle.innerHTML = "Inclusive Alerts: " + inclusiveAlerts.length
+        // const root = ReactDOM.createRoot(document.getElementById('root'));
+        // addCard.innerHTML = ""
+        
+        // let alTitle = document.getElementById('alTitle')
+        // alTitle.innerHTML = "Inclusive Alerts: " + inclusiveAlerts.length
     }
     
     return (
@@ -87,7 +115,7 @@ export default function Demo() {
             <h1 className="text-5xl self-start font-bold my-5 font-roboto">Inkling</h1>
         </div>
         
-        <div className="flex flex-row items-center justify-center">
+        <div className="flex flex-row items-center justify-center mb-5">
             <div className='pt-4 mr-40 self-start'>
                 <Editor
                     spellCheck
@@ -97,7 +125,7 @@ export default function Demo() {
                     editorClassName="editorClassName"
                     editorStyle={{ backgroundColor: "white", padding: 10 }}
                     onEditorStateChange={onEditorChange}
-                    wrapperStyle={{ width: 700, height: 560, borderRight: "1px grey",  }}
+                    wrapperStyle={{ width: 700, height: 600, borderRight: "1px grey",  }}
                 />
                 
             </div>
@@ -105,21 +133,36 @@ export default function Demo() {
             
             <div className='pt-4 pr-10 self-end items-end w-max overflow-y-scroll' style={{height: 600, width: 550}}>
 
-            <h1 className="text-4xl self-end " id="alTitle">Inclusive Alerts: 0</h1>
+            <h1 className="text-4xl self-end " id="alTitle">Inclusivity Alerts: {inclusiveAlerts.length}</h1>
                     
 
                     <div className="flex flex-col mt-10" id='addCard'>
-                            {/* <div className="bg-white p-6 rounded-lg shadow-lg m-2">
-                                <h2 className="text-2xl font-bold mb-2 text-gray-800">Card with no image</h2>
-                                <p className="text-gray-700">This is my cool new card 1!</p>
-                            </div>  
-                            <div className="bg-white p-6 rounded-lg shadow-lg m-2">
-                                <h2 className="text-2xl font-bold mb-2 text-gray-800">Card with no image</h2>
-                                <p className="text-gray-700">This is my cool new card 1!</p>
-                            </div>   */}
+
+                            {
+                                    
+                                inclusiveAlerts.map((item, i) => {
+                                    return (
+
+                                    <div class="bg-white p-6 rounded-lg shadow-lg m-2">
+                                        <h2 class="text-2xl font-bold mb-2 text-gray-800"> {inclusiveAlerts[i]}</h2>
+                                        <p class="text-gray-700">We suggest to use a more <strong>{filterDict[inclusiveAlerts[i]][1]}</strong> term: '<strong>{filterDict[inclusiveAlerts[i]][0]}</strong>'</p>                                        
+
+                                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-4 rounded" id={`btn${p[i]}`}  onClick={replaceWord}>Replace</button>
+                                    </div>  
+                                    )    
+                                })
+                            
+                            }
+
+                            
+                            
+                            {/* console.log(filterDict[inclusiveAlerts[i]])
+                            console.log(p[i]) */}
+                            
+                            
+                        
                         
                     </div>    
-                    
             </div>
         </div>
         
