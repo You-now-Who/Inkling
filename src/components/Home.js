@@ -7,7 +7,7 @@ function Home() {
             <div className="flex flex-col items-center justify-center min-h-screen py-2">
                 {/* <h1 className="text-6xl font-bold">Inkling</h1>
                  */}
-                <img src="https://i.imgur.com/1yxAkxM.png" alt="Inkling Logo" className="w-1/4 h-1/4" />
+                <img src="/pizza.png" alt="Inkling Logo" className="w-1/4 h-1/4" />
                 <p className="mt-3 text-xl font-medium text-gray-600 dark:text-gray-500">
                     One step closer to inclusivity.
                 </p>
