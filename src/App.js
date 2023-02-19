@@ -1,4 +1,5 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -11,8 +12,14 @@ function App() {
     <div className="App">
 
       <Navbar />
-      {/* <Home /> */}
-      <Demo />
+
+      <BrowserRouter>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/demo" element={<Demo />} />
+        </Routes>
+      </BrowserRouter>
 
        {/* <Editor
          toolbarClassName="toolbarClassName"

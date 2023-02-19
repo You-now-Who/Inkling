@@ -17,7 +17,31 @@ let filterDict = {
     "himself": ["themself", "gender neutral"],
     "herself": ["themself", "gender neutral"],
     "guys": ["folks/people/y'all", "gender neutral"],
-
+    "elderly": ["senior citizen", "age appropriate"],
+    "alcoholic": ["person with alcohol use disorder", "substance abuse appropriate"],
+    "alcoholics": ["people with alcohol use disorder", "substance abuse appropriate"],
+    "alcoholism": ["alcohol use disorder", "substance abuse appropriate"],
+    "addict": ["person with substance use disorder", "substance abuse appropriate"],
+    "addicts": ["people with substance use disorder", "substance abuse appropriate"],
+    "addiction": ["substance use disorder", "substance abuse appropriate"],
+    "junkie": ["person with substance use disorder", "substance abuse appropriate"],
+    "junkies": ["people with substance use disorder", "substance abuse appropriate"],
+    "junk": ["substance use disorder", "substance abuse appropriate"],
+    "junking": ["substance use disorder", "substance abuse appropriate"],
+    "junked": ["substance use disorder", "substance abuse appropriate"],
+    "junking": ["substance use disorder", "substance abuse appropriate"],
+    "junkie": ["person with substance use disorder", "substance abuse appropriate"],
+    "blind": ["visually impaired", "disability appropriate"],
+    "deaf": ["hearing impaired", "disability appropriate"],
+    "dumb": ["intellectually disabled", "disability appropriate"],
+    "wheelchair": ["wheelchair bound", "disability appropriate"],
+    "cripple": ["disabled", "disability appropriate"],
+    "mental": ["intellectually disabled", "disability appropriate"],
+    "negro": ["Afro-American", "racially appropriate"],
+    "alvin": ["Alvin and the Chipmunks", "racially appropriate"],
+    "blahaj": ["King Blahaj", "respectful"],
+    "404": ["404 Not Found Jobs", "respectful"],
+    
 
 }
 
@@ -26,10 +50,7 @@ let p = []
 
 export default function Demo() {
     
-    let x = ""
-    
-
-    
+    let x = ""    
 
     const [editorState, setEditorState] = useState(
         () => EditorState.createEmpty(),
@@ -73,12 +94,28 @@ export default function Demo() {
         let textArray = text.split(" ")
 
         let word = textArray[btnIdNum]
-        console.log(word)
+        // console.log(word)
         
-        // extract punctu
+        // extract punctuation from textWord
+
+        // let textWord = textArray[btnIdNum]
+        let punctuation = ""
+        console.log(word[word.length - 1])
+        if (word[word.length - 1] in [",", ".", "!", "?"]) {
+            
+            punctuation = word[word.length - 1]
+            word = word.slice(0, word.length - 1)
+        }
+
+        // remove all punctuation from word
+        word = word.replace(/[.,\/#!$?%\^&\*;:{}=\-_`~()]/g, "")
+
+        console.log(word.toLowerCase())
+        // replace word with filterDict[word]
+        textArray[btnIdNum] = filterDict[word.toLowerCase()][0] + punctuation
 
 
-        textArray[btnIdNum] = filterDict[word.toLowerCase()][0]
+        // textArray[btnIdNum] = filterDict[word.toLowerCase()][0]
         text = textArray.join(" ")
         // console.log(EditorState)
 
@@ -88,6 +125,7 @@ export default function Demo() {
 
         // setEditorState( EditorState.etCurrentContent(editorState, text));
         console.log(text)
+        // useForceRerender()
         
     }
 
@@ -152,16 +190,10 @@ export default function Demo() {
                                     )    
                                 })
                             
-                            }
-
-                            
+                            }                           
                             
                             {/* console.log(filterDict[inclusiveAlerts[i]])
                             console.log(p[i]) */}
-                            
-                            
-                        
-                        
                     </div>    
             </div>
         </div>
